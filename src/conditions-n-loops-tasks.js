@@ -405,8 +405,85 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+
+function createMatrix(size) {
+  const matrix = [];
+
+  for (let i = 0; i < size; i += 1) {
+    const matrixRow = [];
+
+    for (let j = 0; j < size; j += 1) {
+      matrixRow.push(null);
+    }
+
+    matrix.push(matrixRow);
+  }
+
+  return matrix;
+}
+function getSpiralMatrix(size) {
+  const matrix = createMatrix(size);
+
+  let rowIndex = 0;
+  let colIndex = 0;
+
+  let colStart = 0;
+  let rowStart = 0;
+
+  let colEnd = size - 1;
+  let rowEnd = size - 1;
+
+  let direction = 'right';
+
+  for (let i = 0; i < size * size; i += 1) {
+    matrix[rowIndex][colIndex] = i + 1;
+
+    let tempDirection = direction;
+
+    if (direction === 'right') {
+      if (colIndex < colEnd) {
+        colIndex += 1;
+      } else {
+        tempDirection = 'down';
+        rowIndex += 1;
+      }
+    }
+
+    if (direction === 'down') {
+      if (rowIndex < rowEnd) {
+        rowIndex += 1;
+      } else {
+        tempDirection = 'left';
+        colIndex -= 1;
+        colEnd -= 1;
+        rowStart += 1;
+      }
+    }
+
+    if (direction === 'left') {
+      if (colIndex > colStart) {
+        colIndex -= 1;
+      } else {
+        tempDirection = 'up';
+        rowIndex -= 1;
+        rowEnd -= 1;
+      }
+    }
+
+    if (direction === 'up') {
+      if (rowIndex > rowStart) {
+        rowIndex -= 1;
+      } else {
+        tempDirection = 'right';
+        colIndex += 1;
+        colStart += 1;
+      }
+    }
+
+    direction = tempDirection;
+  }
+
+  return matrix;
 }
 
 /**
