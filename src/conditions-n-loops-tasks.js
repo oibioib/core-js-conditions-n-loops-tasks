@@ -421,6 +421,7 @@ function createMatrix(size) {
 
   return matrix;
 }
+
 function getSpiralMatrix(size) {
   const matrix = createMatrix(size);
 
@@ -657,8 +658,90 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+
+function getNumberDigits(number) {
+  let tempNumber = number;
+  const digits = [];
+
+  while (tempNumber > 0) {
+    digits.push(tempNumber % 10);
+    tempNumber = Math.floor(tempNumber / 10);
+  }
+
+  return digits.reverse();
+}
+
+function findDescendingPairIndex(numbers) {
+  for (let i = numbers.length - 1; i > 0; i -= 1) {
+    if (numbers[i] > numbers[i - 1]) {
+      return i - 1;
+    }
+  }
+
+  return null;
+}
+
+function findBiggerThenLeftNumberIndex(numbers, leftIndex) {
+  const biggerThenLeftNumberIndex = [];
+
+  for (let i = leftIndex + 1; i < numbers.length; i += 1) {
+    if (numbers[i] > numbers[leftIndex]) {
+      biggerThenLeftNumberIndex.push([numbers[i], i]);
+    }
+  }
+
+  const [minimalBiggerNumber] = biggerThenLeftNumberIndex.sort(
+    ([a], [b]) => a - b
+  );
+
+  if (minimalBiggerNumber) {
+    const [number, index] = minimalBiggerNumber;
+    return { number, index };
+  }
+
+  return null;
+}
+
+function splitArray(arr, index) {
+  const leftPart = [];
+  const rightPart = [];
+
+  for (let i = 0; i < arr.length; i += 1) {
+    if (i < index) {
+      leftPart.push(arr[i]);
+    } else {
+      rightPart.push(arr[i]);
+    }
+  }
+
+  return [leftPart, rightPart];
+}
+
+function getNearestBigger(number) {
+  const numbers = getNumberDigits(number);
+  const leftIndex = findDescendingPairIndex(numbers);
+
+  if (!leftIndex) {
+    return number;
+  }
+
+  const { index: biggerThenLeftIndex } = findBiggerThenLeftNumberIndex(
+    numbers,
+    leftIndex
+  );
+
+  [numbers[leftIndex], numbers[biggerThenLeftIndex]] = [
+    numbers[biggerThenLeftIndex],
+    numbers[leftIndex],
+  ];
+
+  const [leftPart, rightPart] = splitArray(numbers, leftIndex + 1);
+
+  rightPart.sort((a, b) => a - b);
+
+  const result = [...leftPart, ...rightPart];
+
+  return +result.join('');
 }
 
 module.exports = {
