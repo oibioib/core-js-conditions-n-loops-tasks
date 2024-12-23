@@ -722,7 +722,7 @@ function getNearestBigger(number) {
   const numbers = getNumberDigits(number);
   const leftIndex = findDescendingPairIndex(numbers);
 
-  if (!leftIndex) {
+  if (leftIndex === null) {
     return number;
   }
 
