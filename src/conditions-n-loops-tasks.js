@@ -370,8 +370,9 @@ function getBalanceIndex(arr) {
 
   const sumOfArrayElements = getSumOfArrayElements(arr);
 
-  let leftSum = 0;
-  for (let i = 0; i < arr.length; i += 1) {
+  let leftSum = arr[0];
+
+  for (let i = 1; i < arr.length; i += 1) {
     const rightSum = sumOfArrayElements - leftSum - arr[i];
 
     if (leftSum === rightSum) {
@@ -721,7 +722,7 @@ function getNearestBigger(number) {
   const numbers = getNumberDigits(number);
   const leftIndex = findDescendingPairIndex(numbers);
 
-  if (!leftIndex) {
+  if (leftIndex === null) {
     return number;
   }
 
